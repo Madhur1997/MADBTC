@@ -19,4 +19,11 @@ docker search
 ```
 * What is a onbuild version ?
 
-These images include multiple ONBUILD triggers, which should be all you need to bootstrap most applications. the onbuild version of the image includes helpers that automate the boring parts of getting an app running. Rather than doing these tasks manually (or scripting these tasks), these images do that work for you. 
+These images include multiple ONBUILD triggers, which should be all you need to bootstrap most applications. the onbuild version of the image includes helpers that automate the boring parts of getting an app running. Rather than doing these tasks manually (or scripting these tasks), these images do that work for you.
+
+* Renaming a docker image ?
+
+```bash
+docker tag oldname newname
+docker rmi oldname
+```

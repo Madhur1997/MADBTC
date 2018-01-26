@@ -45,11 +45,13 @@ $ docker rm $(docker ps -a -q -f status=exited)
 ```bash
 $ docker run -d -P --name static-site prakhar1989/static-site
 ```
-flag -d : means detach, so we can close the terminal and the container will run in the background.  
+* -d : means detach, so we can close the terminal and the container will run in the background.  
 To shutdown the detached container use :  
 ```bash
 docker stop #containerid
 ```
+
+* --rm : will remove the container as soon as it stops, means it does not show up in docker ps -a.
 
 To map specific ports to the container ports
 ```bash
