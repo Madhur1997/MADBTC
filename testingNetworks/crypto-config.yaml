@@ -1,0 +1,25 @@
+OrdererOrgs:
+  - Name: Government
+    Domain: example.com
+    Specs:
+      - Hostname: orderer
+
+PeerOrgs:
+  - Name: Arjunkhera
+    Domain: arjun.example.com
+    Template:
+      Count: 2
+    Users:
+      Count: 1
+  - Name: Dharmeshsingh
+    Domain: dharmesh.example.com
+    Template:
+      Count: 2
+    Users:
+      Count: 1
+  - Name: Madhurbatra
+    Domain: madhur.example.com
+    Template:
+      Count: 2
+    Users:
+      Count: 1
