@@ -30,7 +30,10 @@ peer channel join -b mychannel.block
 peer channel update -o orderer.example.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/dharmeshMSPanchors.tx --tls --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem
 
 # install the Go chaincode
-peer chaincode install -n mycc -v 1.0 -p github.com/chaincode/chaincode_example02/go/
+# peer chaincode install -n mycc -v 1.0 -p github.com/chaincode/chaincode_example02/go/
 
 # instantiate the chaincode
-peer chaincode instantiate -o orderer.example.com:7050 --tls --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem -C $CHANNEL_NAME -n mycc -l node -v 1.0 -c '{"Args":["init","a", "100", "b","200"]}' -P "OR ('arjunMSP.member','dharmeshMSP.member')"
+# peer chaincode instantiate -o orderer.example.com:7050 --tls --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem -C $CHANNEL_NAME -n mycc -l node -v 1.0 -c '{"Args":["init","a", "100", "b","200"]}' -P "OR ('arjunMSP.member','dharmeshMSP.member')"
+
+# query the chaincode
+# peer chaincode query -C $CHANNEL_NAME -n mycc -c '{"Args":["query","a"]}'
