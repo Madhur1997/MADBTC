@@ -4,3 +4,6 @@
 [submodule "Indy/indy-plenum"]
 	path = Indy/indy-plenum
 	url = https://github.com/hyperledger/indy-plenum.git
+[submodule "Indy/indy-node"]
+	path = Indy/indy-node
+	url = https://github.com/hyperledger/indy-node.git
