@@ -1,0 +1,72 @@
+
+Profiles:
+    ThreeOrgsOrdererGenesis:
+        Orderer:
+            <<: *OrdererDefaults
+            Organizations:
+                - *OrdererOrg
+        Consortiums:
+            SampleConsortium:
+                Organizations:
+                    - *arjun
+                    - *dharmesh
+                    - *madhur
+    ThreeOrgsChannel:
+        Consortium: SampleConsortium
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+                - *arjun
+                - *dharmesh
+                - *madhur
+
+Organizations:
+    - &OrdererOrg
+        Name: OrdererOrg
+        ID: OrdererMSP
+        MSPDir: crypto-config/ordererOrganizations/example.com/msp
+
+    - &arjun
+        Name: arjunMSP
+        ID: arjunMSP
+        MSPDir: crypto-config/peerOrganizations/arjun.example.com/msp
+        AnchorPeers:
+            - Host: peer0.arjun.example.com
+              Port: 7051
+
+    - &dharmesh
+        Name: dharmeshMSP
+        ID: dharmeshMSP
+        MSPDir: crypto-config/peerOrganizations/dharmesh.example.com/msp
+        AnchorPeers:
+            - Host: peer0.dharmesh.example.com
+              Port: 7051
+
+    - &madhur
+      Name: madhurMSP
+      ID: madhurMSP
+      MSPDir: crypto-config/peerOrganizations/madhur.example.com/msp
+      AnchorPeers:
+          - Host: peer0.madhur.example.com
+            Port: 7051
+
+Orderer: &OrdererDefaults
+    OrdererType: solo
+    Addresses:
+        - orderer.example.com:7050
+    BatchTimeout: 2s
+    BatchSize:
+        MaxMessageCount: 10
+        AbsoluteMaxBytes: 99 MB
+        PreferredMaxBytes: 512 KB
+
+    Kafka:
+        Brokers:
+            - 127.0.0.1:9092
+    Organizations:
+
+Application: &ApplicationDefaults
+
+    # Organizations is the list of orgs which are defined as participants on
+    # the application side of the network
+    Organizations:
