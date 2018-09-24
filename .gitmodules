@@ -1,3 +1,12 @@
 [submodule "Docker/docker-curriculum"]
 	path = Docker/docker-curriculum
 	url = https://github.com/prakhar1989/docker-curriculum
+[submodule "Indy/indy-plenum"]
+	path = Indy/indy-plenum
+	url = https://github.com/hyperledger/indy-plenum.git
+[submodule "Indy/indy-node"]
+	path = Indy/indy-node
+	url = https://github.com/hyperledger/indy-node.git
+[submodule "Indy/indy-sdk"]
+	path = Indy/indy-sdk
+	url = https://github.com/hyperledger/indy-sdk.git
