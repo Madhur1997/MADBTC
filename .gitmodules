@@ -7,3 +7,6 @@
 [submodule "Indy/indy-node"]
 	path = Indy/indy-node
 	url = https://github.com/hyperledger/indy-node.git
+[submodule "Indy/indy-sdk"]
+	path = Indy/indy-sdk
+	url = https://github.com/hyperledger/indy-sdk.git
