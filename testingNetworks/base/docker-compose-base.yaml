@@ -1,0 +1,141 @@
+version: '2'
+
+services:
+
+  orderer.example.com:
+    container_name: orderer.example.com
+    image: hyperledger/fabric-orderer
+    environment:
+      - ORDERER_GENERAL_LOGLEVEL=debug
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      # enabled TLS
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: orderer
+    volumes:
+    - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+    - ../crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/msp:/var/hyperledger/orderer/msp
+    - ../crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/:/var/hyperledger/orderer/tls
+    ports:
+      - 7050:7050
+
+  peer0.arjun.example.com:
+    container_name: peer0.arjun.example.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer0.arjun.example.com
+      - CORE_PEER_ADDRESS=peer0.arjun.example.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.arjun.example.com:7051
+      - CORE_PEER_LOCALMSPID=arjunMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/arjun.example.com/peers/peer0.arjun.example.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/arjun.example.com/peers/peer0.arjun.example.com/tls:/etc/hyperledger/fabric/tls
+    ports:
+      - 7051:7051
+      - 7053:7053
+
+  peer1.arjun.example.com:
+    container_name: peer1.arjun.example.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer1.arjun.example.com
+      - CORE_PEER_ADDRESS=peer1.arjun.example.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.arjun.example.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.arjun.example.com:7051
+      - CORE_PEER_LOCALMSPID=arjunMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/arjun.example.com/peers/peer1.arjun.example.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/arjun.example.com/peers/peer1.arjun.example.com/tls:/etc/hyperledger/fabric/tls
+
+    ports:
+      - 8051:7051
+      - 8053:7053
+
+  peer0.dharmesh.example.com:
+    container_name: peer0.dharmesh.example.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer0.dharmesh.example.com
+      - CORE_PEER_ADDRESS=peer0.dharmesh.example.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.dharmesh.example.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.dharmesh.example.com:7051
+      - CORE_PEER_LOCALMSPID=dharmeshMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/dharmesh.example.com/peers/peer0.dharmesh.example.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/dharmesh.example.com/peers/peer0.dharmesh.example.com/tls:/etc/hyperledger/fabric/tls
+    ports:
+      - 9051:7051
+      - 9053:7053
+
+  peer1.dharmesh.example.com:
+    container_name: peer1.dharmesh.example.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer1.dharmesh.example.com
+      - CORE_PEER_ADDRESS=peer1.dharmesh.example.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.dharmesh.example.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.dharmesh.example.com:7051
+      - CORE_PEER_LOCALMSPID=dharmeshMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/dharmesh.example.com/peers/peer1.dharmesh.example.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/dharmesh.example.com/peers/peer1.dharmesh.example.com/tls:/etc/hyperledger/fabric/tls
+    ports:
+      - 10051:7051
+      - 10053:7053
+
+  peer0.madhur.example.com:
+    container_name: peer0.madhur.example.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer0.madhur.example.com
+      - CORE_PEER_ADDRESS=peer0.madhur.example.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.madhur.example.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.madhur.example.com:7051
+      - CORE_PEER_LOCALMSPID=madhurMSP
+    volumes:
+      - /var/run/:/host/var/run/
+      - ../crypto-config/peerOrganizations/madhur.example.com/peers/peer0.madhur.example.com/msp:/etc/hyperledger/fabric/msp
+      - ../crypto-config/peerOrganizations/madhur.example.com/peers/peer0.madhur.example.com/tls:/etc/hyperledger/fabric/tls
+    ports:
+      - 11051:7051
+      - 11053:7053
+
+  peer1.madhur.example.com:
+    container_name: peer1.madhur.example.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer1.madhur.example.com
+      - CORE_PEER_ADDRESS=peer1.madhur.example.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.madhur.example.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.madhur.example.com:7051
+      - CORE_PEER_LOCALMSPID=madhurMSP
+    volumes:
+      - /var/run/:/host/var/run/
+      - ../crypto-config/peerOrganizations/madhur.example.com/peers/peer1.madhur.example.com/msp:/etc/hyperledger/fabric/msp
+      - ../crypto-config/peerOrganizations/madhur.example.com/peers/peer1.madhur.example.com/tls:/etc/hyperledger/fabric/tls
+    ports:
+      - 12051:7051
+      - 12053:7053
