@@ -14,17 +14,13 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 async def run():
-	logger.info("Getting started -> started")
 
 	pool_name = 'pool1'
-	logger.info("Open Pool Ledger: {}".format(pool_name))
 	pool_genesis_txn_path = get_pool_genesis_txn_path(pool_name)
-	#print(pool_genesis_txn_path)
 	pool_config = json.dumps({"genesis_txn": str(pool_genesis_txn_path)})
-	#print(pool_config)
 
 
-	# Set protocol version 2 organization work with Indy Node 1.4
+	# Set protocol version 2 NSUT work with Indy Node 1.4
 	await pool.set_protocol_version(PROTOCOL_VERSION)
 
 	try:
@@ -43,23 +39,24 @@ async def run():
 	with open(fname,'r') as f:
 		steward_did = f.readline()
 
-	logger.info("\"Steward\" -> Create and store in Wallet \"Steward Organization\" DID")
-	(steward_organization_did, steward_organization_key) = await did.create_and_store_my_did(steward_wallet, "{}")
+	logger.info("\"Steward\" -> Create and store in Wallet \"Steward-NSUT\" DID")
+	(steward_NSUT_did, steward_NSUT_key) = await did.create_and_store_my_did(steward_wallet, "{}")
 
-	logger.info("\"Steward\" -> Send Nym to Ledger for \"Steward Organization\" DID")
-	await send_nym(pool_handle, steward_wallet, steward_did, steward_organization_did, steward_organization_key, None)
+	logger.info("\"Steward\" -> Send Nym to Ledger for \"Steward-NSUT\" DID")
+	await send_nym(pool_handle, steward_wallet, steward_did, steward_NSUT_did, steward_NSUT_key, None)
 
-	logger.info("\"Steward\" -> Send connection request to {} with \"Steward Organization\" DID and nonce")
+	logger.info("\"Steward\" -> Send connection request to NSUT with \"Steward-NSUT\" DID and nonce")
 	connection_request = {
-	'did': steward_organization_did,
+	'did': steward_NSUT_did,
 	'nonce': 123456789
 	} 
-	fname = "connectionReqStewardOrg.txt"
+
+	fname = "connectionReqStewardNSUT.txt"
 	with open(fname,'w') as f:
 		f.write(str(connection_request))
-	fname = "stewardOrgDIDPair.txt" 
+	fname = "stewardNSUTDIDPair.txt" 
 	with open(fname,'w') as f:
-		f.write(steward_organization_did)
+		f.write(steward_NSUT_did)
 
 
 async def send_nym(pool_handle, wallet_handle, _did, new_did, new_key, role):

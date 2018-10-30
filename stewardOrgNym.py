@@ -14,17 +14,13 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 async def run():
-	logger.info("Getting started -> started")
-
+	
 	pool_name = 'pool1'
-	logger.info("Open Pool Ledger: {}".format(pool_name))
 	pool_genesis_txn_path = get_pool_genesis_txn_path(pool_name)
-	#print(pool_genesis_txn_path)
 	pool_config = json.dumps({"genesis_txn": str(pool_genesis_txn_path)})
-	#print(pool_config)
 
 
-	# Set protocol version 2 organization work with Indy Node 1.4
+	# Set protocol version 2 NSUT work with Indy Node 1.4
 	await pool.set_protocol_version(PROTOCOL_VERSION)
 
 	try:
@@ -38,36 +34,39 @@ async def run():
 	steward_wallet_credentials = json.dumps({"key": "steward_wallet_key"})
 	steward_wallet = await wallet.open_wallet(steward_wallet_config, steward_wallet_credentials)
 
-	fname = "connectionRespOrgSteward.bin"
-	with open(fname,'rb') as f:
-		anoncrypted_connection_response = f.read()
 
 	#print(anoncrypted_connection_response)
 
-	logger.info("\"Steward\" -> Anondecrypt connection response from \"Organization\"")
+	logger.info("\"Steward\" -> Receives Anoncrypted connection response from \"NSUT\"")
 
-	fname = "stewardOrgDIDPair.txt"
+	fname = "stewardNSUTDIDPair.txt"
 	with open(fname,'r') as f:
-		steward_organization_did = f.readline()
+		steward_NSUT_did = f.readline()
 
-	steward_organization_key = did.key_for_did(pool_handle, steward_wallet, steward_organization_did )
-	decrypted_connection_response = \
-        json.loads((await crypto.anon_decrypt(steward_wallet, steward_organization_key,
-                                              anoncrypted_connection_response)).decode("utf-8"))
+	steward_NSUT_key = await did.key_for_did(pool_handle, steward_wallet, steward_NSUT_did )
+	
+	fname = "connectionRespNSUTSteward.txt"
+	with open(fname,'r') as f:
+		decrypted_connection_response = eval(f.readline())	
+	'''decrypted_connection_response = \
+        json.loads((await crypto.anon_decrypt(steward_wallet, steward_NSUT_key,
+                                              anoncrypted_connection_response)).decode("utf-8"))'''
 
-	fname = "connectionReqStewardOrganization.txt"
+	fname = "connectionReqStewardNSUT.txt"
 	with open(fname,'r') as f:
 		connection_request = eval(f.readline())
 
-	logger.info("\"Steward\" -> Authenticates \"Organization\" by comparision of Nonce")
+	logger.info("\"Steward\" -> Authenticates \"NSUT\" by comparision of Nonce")
 	assert connection_request['nonce'] == decrypted_connection_response['nonce']
 
 	fname = "stewardDID.txt"
 	with open(fname,'r') as f:
 		steward_did = f.readline()
-
-	logger.info("\"Steward\" -> Send Nym to Ledger for \"Organization Steward\" DID")
-	await send_nym(pool_handle, steward_wallet, steward_did, organization_steward_did, organization_steward_key, None)
+	
+	NSUT_steward_did = decrypted_connection_response['did']
+	NSUT_steward_key = decrypted_connection_response['verkey']
+	logger.info("\"Steward\" -> Send Nym to Ledger for \"NSUT-Steward\" DID")
+	await send_nym(pool_handle, steward_wallet, steward_did, NSUT_steward_did, NSUT_steward_key, None)
 
 
 async def send_nym(pool_handle, wallet_handle, _did, new_did, new_key, role):
