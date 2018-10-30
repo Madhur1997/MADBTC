@@ -20,9 +20,7 @@ async def run():
     pool_name = 'pool1'
     logger.info("Open Pool Ledger: {}".format(pool_name))
     pool_genesis_txn_path = get_pool_genesis_txn_path(pool_name)
-    #print(pool_genesis_txn_path)
     pool_config = json.dumps({"genesis_txn": str(pool_genesis_txn_path)})
-    #print(pool_config)
     
 
     # Set protocol version 2 to work with Indy Node 1.4
@@ -47,7 +45,7 @@ async def run():
 
     steward_wallet = await wallet.open_wallet(steward_wallet_config, steward_wallet_credentials)
 
-    logger.info("\"Sovrin Steward\" -> Create and store in Wallet DID from seed")
+    logger.info("\"Sovrin Steward\" -> Create and store in Wallet the DID from seed")
     steward_did_info = {'seed': '000000000000000000000000Steward1'}
     (steward_did, steward_key) = await did.create_and_store_my_did(steward_wallet, json.dumps(steward_did_info))
     
