@@ -15,6 +15,7 @@ logging.basicConfig(level=logging.INFO)
 
 async def run():
 	
+	
 	pool_name = 'pool1'
 	pool_genesis_txn_path = get_pool_genesis_txn_path(pool_name)
 	pool_config = json.dumps({"genesis_txn": str(pool_genesis_txn_path)})
@@ -36,8 +37,8 @@ async def run():
 
 
 	#print(anoncrypted_connection_response)
-
-	logger.info("\"Steward\" -> Receives Anoncrypted connection response from \"NSUT\"")
+	print("\n")
+	logger.info(" \"Steward\" -> Receives Anoncrypted connection response from \"NSUT\" \n")
 
 	fname = "stewardNSUTDIDPair.txt"
 	with open(fname,'r') as f:
@@ -45,6 +46,7 @@ async def run():
 
 	steward_NSUT_key = await did.key_for_did(pool_handle, steward_wallet, steward_NSUT_did )
 	
+	logger.info(" \"Steward\" -> Decrypts the connection response received from \"NSUT\" using its private key\n")
 	fname = "connectionRespNSUTSteward.txt"
 	with open(fname,'r') as f:
 		decrypted_connection_response = eval(f.readline())	
@@ -56,7 +58,7 @@ async def run():
 	with open(fname,'r') as f:
 		connection_request = eval(f.readline())
 
-	logger.info("\"Steward\" -> Authenticates \"NSUT\" by comparision of Nonce")
+	logger.info(" \"Steward\" -> Authenticates \"NSUT\" by comparision of the Nonce values of the connection request and the connection 		response from NSUT agent\n")
 	assert connection_request['nonce'] == decrypted_connection_response['nonce']
 
 	fname = "stewardDID.txt"
@@ -65,7 +67,7 @@ async def run():
 	
 	NSUT_steward_did = decrypted_connection_response['did']
 	NSUT_steward_key = decrypted_connection_response['verkey']
-	logger.info("\"Steward\" -> Send Nym to Ledger for \"NSUT-Steward\" DID")
+	logger.info(" \"Steward\" -> Sends Nym(DID, verification key pair) to Ledger for \"NSUT-Steward\" DID \n\n")
 	await send_nym(pool_handle, steward_wallet, steward_did, NSUT_steward_did, NSUT_steward_key, None)
 
 

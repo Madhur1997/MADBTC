@@ -15,6 +15,7 @@ logging.basicConfig(level=logging.INFO)
 
 async def run():
 
+	print("\n\n")
 	pool_name = 'pool1'
 	pool_genesis_txn_path = get_pool_genesis_txn_path(pool_name)
 	pool_config = json.dumps({"genesis_txn": str(pool_genesis_txn_path)})
@@ -39,13 +40,13 @@ async def run():
 	with open(fname,'r') as f:
 		steward_did = f.readline()
 
-	logger.info("\"Steward\" -> Create and store in Wallet \"Steward-NSUT\" DID")
+	logger.info(" \"Steward\" -> Creates and stores \"Steward-NSUT\" DID in the wallet\n")
 	(steward_NSUT_did, steward_NSUT_key) = await did.create_and_store_my_did(steward_wallet, "{}")
 
-	logger.info("\"Steward\" -> Send Nym to Ledger for \"Steward-NSUT\" DID")
+	logger.info(" \"Steward\" -> Sends Nym(DID, verification key pair) to the Ledger for \"Steward-NSUT\" DID\n")
 	await send_nym(pool_handle, steward_wallet, steward_did, steward_NSUT_did, steward_NSUT_key, None)
 
-	logger.info("\"Steward\" -> Send connection request to NSUT with \"Steward-NSUT\" DID and nonce")
+	logger.info(" \"Steward\" -> Sends connection request to NSUT with \"Steward-NSUT\" DID and nonce\n\n")
 	connection_request = {
 	'did': steward_NSUT_did,
 	'nonce': 123456789

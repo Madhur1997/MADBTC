@@ -15,10 +15,8 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 async def run():
-    print("\n")
-    logger.info(" Getting Started\n")
-    
 
+    print('\n')
     logger.info(" \"Sovrin Steward\" -> Connecting to the started indy pool \n")
     pool_name = 'pool1'
     logger.info(" Open Pool Ledger: {}".format(pool_name))
@@ -49,16 +47,10 @@ async def run():
     logger.info(" \"Sovrin Steward\" -> Opening Steward wallet \n")
     steward_wallet = await wallet.open_wallet(steward_wallet_config, steward_wallet_credentials)
 
-    logger.info(" \"Sovrin Steward\" -> Creates and stores the DID in the wallet using the intital seed values\n\n")
-    steward_did_info = {'seed': '000000000000000000000000Steward1'}
-    (steward_did, steward_key) = await did.create_and_store_my_did(steward_wallet, json.dumps(steward_did_info))
+    logger.info(" \"Sovrin Steward\" -> Deleting Steward wallet \n")
+    await wallet.close_wallet(steward_wallet)
+    await wallet.delete_wallet(steward_wallet_config, steward_wallet_credentials)
     
-
-    fname = "stewardDID.txt"
-    with open(fname, 'w') as f:
-    	f.write(steward_did)
-    
-       
 	
 
 if __name__ == '__main__':

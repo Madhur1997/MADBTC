@@ -15,6 +15,9 @@ logging.basicConfig(level=logging.INFO)
 
 async def run():
 
+	print("\n")
+	logger.info(" NSUT connects to the running indy pool\n")
+
 	pool_name = 'pool1'
 	pool_genesis_txn_path = get_pool_genesis_txn_path(pool_name)
 	pool_config = json.dumps({"genesis_txn": str(pool_genesis_txn_path)})
@@ -30,9 +33,9 @@ async def run():
 	    		pass
 	pool_handle = await pool.open_pool_ledger(pool_name, None)
 
-	logger.info("==============================")
-	logger.info("== NSUT creates a wallet  ==")
-	logger.info("------------------------------")
+	logger.info(" ==============================")
+	logger.info(" == \"NSUT\" creates a wallet to store its credentials ==")
+	logger.info(" ------------------------------\n")
 
 	NSUT_wallet_config = json.dumps({"id": "NSUT_wallet"})
 	NSUT_wallet_credentials = json.dumps({"key": "NSUT_wallet_key"})
@@ -44,10 +47,14 @@ async def run():
 	    		pass
 	NSUT_wallet = await wallet.open_wallet(NSUT_wallet_config, NSUT_wallet_credentials)
 
-	logger.info("\"NSUT\" -> Create and store in Wallet \"NSUT-Steward DID\" ")
+	logger.info(" ==============================")
+	logger.info(" == \"NSUT\" opens its wallet  ==")
+	logger.info(" ------------------------------\n")
+
+	logger.info(" \"NSUT\" -> Creates and stores \"NSUT-Steward DID\"(serves as an id of NSUT for its relation with the steward.\n")
 	(NSUT_steward_did, NSUT_steward_key) = await did.create_and_store_my_did(NSUT_wallet, "{}")
 
-	logger.info("\"NSUT\" -> Get key for did from \"Steward\" connection request")
+	logger.info(" \"NSUT\" -> Gets the verification key for Steward's DID from connection request sent by the \"Steward\" \n")
 
 	fname = "connectionReqStewardNSUT.txt"
 	with open(fname,'r') as f:
@@ -55,7 +62,7 @@ async def run():
 	
 	steward_NSUT_verkey = await did.key_for_did(pool_handle, NSUT_wallet, connection_request['did'])
 
-	logger.info("\"NSUT\" -> Anoncrypt connection response for \"Steward\" with \"NSUT-Steward\" DID, verkey and nonce")
+	logger.info(" \"NSUT\" -> Anoncrypts the connection response for Steward with \"NSUT-Steward\" DID, verkey and nonce using verification key of the steward\n")
 
 	'''connection_response = json.dumps({
 	'did': NSUT_steward_did,
@@ -72,7 +79,7 @@ async def run():
 
 	#anoncrypted_connection_response = await crypto.anon_crypt(steward_NSUT_verkey, connection_response.encode('utf-8'))
 
-	logger.info("\"NSUT\" -> Send anoncrypted connection response to \"Steward")
+	logger.info("\"NSUT\" -> Sends anoncrypted connection response to the \"Steward\"\n\n")
 	fname = "connectionRespNSUTSteward.txt"
 	with open(fname,'w') as f:
 		f.write(str(anoncrypted_connection_response))
